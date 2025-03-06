@@ -2,37 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping/CartProvider.dart';
 import 'package:shopping/cart_screen.dart';
-import 'product.dart';
+import 'package:shopping/product_provider.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  final List<Product> products = [
-    Product(
-      id: '1',
-      name: 'Laptop',
-      price: 54700,
-      imageUrl:
-          'https://productimages.hepsiburada.net/s/429/848-1200/110000460992834.jpg/format:webp',
-    ),
-    Product(
-      id: '2',
-      name: 'Telefon',
-      price: 37899,
-      imageUrl:
-          'https://productimages.hepsiburada.net/s/337/424-600/110000278035368.jpg/format:webp',
-    ),
-    Product(
-      id: '3',
-      name: 'Kulaklık',
-      price: 1350,
-      imageUrl:
-          'https://productimages.hepsiburada.net/s/448/848-1200/110000482594638.jpg/format:webp',
-    ),
-  ];
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductProvider>(context, listen: false).fetchProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,23 +52,26 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Card(
-            child: ListTile(
-              leading: Image.network(product.imageUrl, width: 50, height: 50),
-              title: Text(product.name),
-              subtitle: Text("${product.price} TL"),
-              trailing: IconButton(
-                icon: Icon(Icons.add_shopping_cart),
-                onPressed: () => cartProvider.addToCart(product),
-              ),
+      body: productProvider.products.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: productProvider.products.length,
+              itemBuilder: (context, index) {
+                final product = productProvider.products[index];
+                return Card(
+                  child: ListTile(
+                    leading:
+                        Image.network(product.imageUrl, width: 50, height: 50),
+                    title: Text(product.name),
+                    subtitle: Text("${product.price} TL"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.add_shopping_cart),
+                      onPressed: () => cartProvider.addToCart(product),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
