@@ -33,20 +33,35 @@ class CartScreen extends StatelessWidget {
             ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: ElevatedButton(
-          onPressed: () async {
-            bool success = await cartProvider.purchaseItems();
-            if (success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Satın alma başarılı! (Simülasyon)")),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Satın alma başarısız!")),
-              );
-            }
-          },
-          child: Text("Satın Al"),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // 🛒 Toplam fiyat etiketi
+            Text(
+              "Toplam: ${cartProvider.totalPrice.toStringAsFixed(2)} TL",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            // 🛍 Satın alma butonu
+            ElevatedButton(
+              onPressed: cartProvider.cartItems.isEmpty
+                  ? null
+                  : () async {
+                      bool success = await cartProvider.purchaseItems();
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text("Satın alma başarılı! (Simülasyon)")),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Satın alma başarısız!")),
+                        );
+                      }
+                    },
+              child: Text("Satın Al"),
+            ),
+          ],
         ),
       ),
     );
