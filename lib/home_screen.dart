@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     leading:
                         Image.network(product.imageUrl, width: 50, height: 50),
                     title: Text(product.name),
-                    subtitle: Text("${product.price} TL"),
+                    subtitle: Text("${product.price} TL "),
                     trailing: IconButton(
                       icon: Icon(Icons.add_shopping_cart),
                       onPressed: () => cartProvider.addToCart(product),

@@ -7,15 +7,32 @@ class CartProvider with ChangeNotifier {
   final List<Product> _cartItems = [];
 
   List<Product> get cartItems => _cartItems;
-  double get totalPrice => _cartItems.fold(0, (sum, item) => sum + item.price);
+  double get totalPrice =>
+      _cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 
   void addToCart(Product product) {
-    _cartItems.add(product);
+    int index = _cartItems.indexWhere((item) => item.id == product.id);
+
+    if (index != -1) {
+      _cartItems[index].quantity += 1;
+    } else {
+      _cartItems.add(product);
+    }
+
     notifyListeners();
   }
 
   void removeFromCart(Product product) {
-    _cartItems.remove(product);
+    int index = _cartItems.indexWhere((item) => item.id == product.id);
+
+    if (index != -1) {
+      if (_cartItems[index].quantity > 1) {
+        _cartItems[index].quantity -= 1;
+      } else {
+        _cartItems.removeAt(index);
+      }
+    }
+
     notifyListeners();
   }
 

@@ -22,10 +22,21 @@ class CartScreen extends StatelessWidget {
                     leading:
                         Image.network(product.imageUrl, width: 50, height: 50),
                     title: Text(product.name),
-                    subtitle: Text("${product.price} TL"),
-                    trailing: IconButton(
-                      icon: Icon(Icons.remove_shopping_cart),
-                      onPressed: () => cartProvider.removeFromCart(product),
+                    subtitle:
+                        Text("${product.price} TL x ${product.quantity} adet"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () => cartProvider.removeFromCart(product),
+                        ),
+                        Text("${product.quantity}"),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () => cartProvider.addToCart(product),
+                        ),
+                      ],
                     ),
                   ),
                 );
