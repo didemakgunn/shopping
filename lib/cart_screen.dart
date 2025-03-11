@@ -36,12 +36,10 @@ class CartScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // 🛒 Toplam fiyat etiketi
             Text(
               "Toplam: ${cartProvider.totalPrice.toStringAsFixed(2)} TL",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            // 🛍 Satın alma butonu
             ElevatedButton(
               onPressed: cartProvider.cartItems.isEmpty
                   ? null
@@ -49,9 +47,7 @@ class CartScreen extends StatelessWidget {
                       bool success = await cartProvider.purchaseItems();
                       if (success) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content:
-                                  Text("Satın alma başarılı! (Simülasyon)")),
+                          SnackBar(content: Text("Satın alma başarılı!")),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
